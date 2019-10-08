@@ -1,14 +1,18 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 
 function App() {
   // useState - Controla o estado - desestruturamos o retorno recebendo o estado e uma funcao para altera-lo
   const [tech, setTech] = useState([]);
   const [newTech, setNewTech] = useState('');
 
-  function handleAdd() {
+  // useCallback - retorna uma funcao
+  // Sempre que temos uma funcao dentro de nossa funcao do componente com nossos estados,
+  // toda vez que o estado mudar o JS remonta nossas funcoes o que gera processamento desnecessario
+  // o useCallback encapsula nossas funcoes evitando esse problema
+  const handleAdd = useCallback(() => {
     setTech([...tech, newTech]);
     setNewTech('');
-  }
+  }, [newTech, tech]);
 
   // useEffect substitui os metodos de ciclo de vida
   // recebe uma funcao que sera executada como primeiro parametro e um valor que fica ouvindo como segundo paramentro

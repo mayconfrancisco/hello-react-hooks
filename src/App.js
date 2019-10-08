@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 
 function App() {
   // useState - Controla o estado - desestruturamos o retorno recebendo o estado e uma funcao para altera-lo
@@ -25,7 +25,17 @@ function App() {
   // desta forma conseguimos substitui o didUpdate por exemplo
   useEffect(() => {
     localStorage.setItem('@hooks/tech', JSON.stringify(tech));
+
+    // podemos retornar uma funcao em cada um dos useEffect
+    // esta funcao sera executada sempre que o componente for desmontado/removido da tela
+    // ou seja, podemos substituir o WillUnmount
+    // return () => document.removeEventListener();
   }, [tech]);
+
+  // useMemo monitora uma dependencia e entao executa uma funcao com um unico retorno, sempre que a dependencia mudar
+  // excelente para quando precisamos mostrar no render algum resultado de uma funcao
+  // ao inves de executa-la a cada render, a funcao sera executada apenas quando a dependencia mudar
+  const techSize = useMemo(() => tech.length, [tech]);
 
   return (
     <>
@@ -43,6 +53,8 @@ function App() {
       <button type="button" onClick={handleAdd}>
         Adicionar
       </button>
+      <br />
+      <strong>Você possui {techSize} tecnologias</strong>
     </>
   );
 }
